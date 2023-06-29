@@ -79,6 +79,7 @@ func (p *Plugin) GetPublicKeys(ctx context.Context, req *keymanagerv1.GetPublicK
 // with the given ID does not exist, NOT_FOUND is returned. The response contains the signed data and the fingerprint of
 // the key used to sign the data. See the PublicKey message for more details on the role of the fingerprint.
 func (p *Plugin) SignData(ctx context.Context, req *keymanagerv1.SignDataRequest) (*keymanagerv1.SignDataResponse, error) {
+	p.logger.Info("HELLO WORLD")
 	resp, err := p.signData(req)
 	return resp, prefixStatus(err, "failed to sign data")
 }

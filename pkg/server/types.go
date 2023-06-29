@@ -12,10 +12,9 @@ import (
 type Plugin struct {
 	// taken from keymanager base in spire codebase
 	keymanagerv1.UnsafeKeyManagerServer
-
+	logger  hclog.Logger
 	mu      sync.RWMutex
 	entries map[string]*KeyEntry
-	logger  hclog.Logger
 }
 
 // KeyEntry is an entry maintained by the key manager
