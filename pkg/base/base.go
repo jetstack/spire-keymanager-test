@@ -81,17 +81,17 @@ func (m *Base) SetEntries(entries []*KeyEntry) {
 
 // GenerateKey implements the KeyManager RPC of the same name.
 func (m *Base) GenerateKey(ctx context.Context, req *keymanagerv1.GenerateKeyRequest) (*keymanagerv1.GenerateKeyResponse, error) {
+	m.logger.Info("DEBUG: Entering generate key function")
 	resp, err := m.generateKey(ctx, req)
 	return resp, prefixStatus(err, "failed to generate key")
 }
 
 // GetPublicKey implements the KeyManager RPC of the same name.
 func (m *Base) GetPublicKey(_ context.Context, req *keymanagerv1.GetPublicKeyRequest) (*keymanagerv1.GetPublicKeyResponse, error) {
+	m.logger.Info("DEBUG: Entering get public key function")
 	if req.KeyId == "" {
 		return nil, status.Error(codes.InvalidArgument, "key id is required")
 	}
-
-	m.logger.Info("THIS IS A TEST LOG %s", "test test")
 
 	m.mu.RLock()
 	defer m.mu.RUnlock()
@@ -110,7 +110,7 @@ func (m *Base) GetPublicKeys(context.Context, *keymanagerv1.GetPublicKeysRequest
 	m.mu.RLock()
 	defer m.mu.RUnlock()
 
-	m.logger.Info("THIS IS A TEST LOG %s", "test test")
+	m.logger.Info("DEBUG: Entering get public keys function")
 	resp := new(keymanagerv1.GetPublicKeysResponse)
 	for _, entry := range entriesSliceFromMap(m.entries) {
 		resp.PublicKeys = append(resp.PublicKeys, clonePublicKey(entry.PublicKey))
@@ -121,7 +121,7 @@ func (m *Base) GetPublicKeys(context.Context, *keymanagerv1.GetPublicKeysRequest
 
 // SignData implements the KeyManager RPC of the same name.
 func (m *Base) SignData(_ context.Context, req *keymanagerv1.SignDataRequest) (*keymanagerv1.SignDataResponse, error) {
-	m.logger.Info("THIS IS A TEST LOG %s", "test test")
+	m.logger.Info("DEBUG: Entering get public keys function")
 	resp, err := m.signData(req)
 	return resp, prefixStatus(err, "failed to sign data")
 }
@@ -134,7 +134,7 @@ func (m *Base) generateKey(ctx context.Context, req *keymanagerv1.GenerateKeyReq
 		return nil, status.Error(codes.InvalidArgument, "key type is required")
 	}
 
-	m.logger.Info("THIS IS A TEST LOG %s", "test test")
+	m.logger.Info("DEBUG: Entering generate key function")
 	newEntry, err := m.generateKeyEntry(req.KeyId, req.KeyType)
 	if err != nil {
 		return nil, err
@@ -170,7 +170,6 @@ func (m *Base) signData(req *keymanagerv1.SignDataRequest) (*keymanagerv1.SignDa
 	if req.SignerOpts == nil {
 		return nil, status.Error(codes.InvalidArgument, "signer opts is required")
 	}
-	m.logger.Info("THIS IS A TEST LOG %s", "test test")
 
 	var signerOpts crypto.SignerOpts
 	switch opts := req.SignerOpts.(type) {
